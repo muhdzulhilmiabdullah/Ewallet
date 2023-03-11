@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>E-wallet</title>
+    <title>xE-wallet</title>
 
     <!-- Fonts -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css" integrity="sha384-XdYbMnZ/QjLh6iI4ogqCTaIjrFk87ip+ekIjefZch0Y+PvJ8CDYtEs1ipDmPorQ+" crossorigin="anonymous">
@@ -24,6 +24,24 @@
         .fa-btn {
             margin-right: 6px;
         }
+        #videoCam {
+         width: 50vh;
+         height: 50vh;
+         margin-left: 0px;
+         border: 3px solid #ccc;
+         background: black;
+      }
+      #startBtn {
+         
+         width: 120px;
+         height: 45px;
+         cursor: pointer;
+         font-weight: bold;
+      }
+      #startBtn:hover{
+         background-color: #647C90;
+         color: red;
+      }
     </style>
 </head>
 <body id="app-layout">
@@ -40,9 +58,15 @@
                 </button>
 
                 <!-- Branding Image -->
+                @if (Auth::guest())
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    E-wallet
+                    xE-wallet
                 </a>
+                @else
+                <a class="navbar-brand" href="{{ url('/home') }}">
+                    xE-wallet
+                </a>
+                @endif
             </div>
 
             <div class="collapse navbar-collapse" id="app-navbar-collapse">
@@ -65,8 +89,9 @@
 
                             <ul class="dropdown-menu" role="menu">
                                 <li><a href="{{ url('/logout') }}"><i class="fa fa-btn fa-sign-out"></i>Logout</a></li>
+                                <li><a href="{{ url('/qrCode') }}"><i class="fa fa-btn fa-sign-out"></i>QR Code</a></li>
                                 @if(Auth::user()->role ==1)
-                                <li><a href="{{ url('/logout') }}"><i class="fa fa-btn fa-sign-out"></i>Setting</a></li>
+                                <li><a href="{{ url('/promoCode') }}"><i class="fa fa-btn fa-sign-out"></i>Promo Code</a></li>
                                 @endif
                             </ul>
                         </li>
@@ -82,6 +107,33 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.min.js" integrity="sha384-I6F5OKECLVtK/BL+8iSLDEHowSAfUo76ZL9+kGAgTRdiByINKJaqTPH/QVNS1VDb" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
     {{-- <script src="{{ elixir('js/app.js') }}"></script> --}}
+    <script>
+      function openCam(){
+         let All_mediaDevices=navigator.mediaDevices
+         if (!All_mediaDevices || !All_mediaDevices.getUserMedia) {
+            console.log("getUserMedia() not supported.");
+            return;
+         }
+         All_mediaDevices.getUserMedia({
+            audio: true,
+            video: true
+         })
+         .then(function(vidStream) {
+            var video = document.getElementById('videoCam');
+            if ("srcObject" in video) {
+               video.srcObject = vidStream;
+            } else {
+               video.src = window.URL.createObjectURL(vidStream);
+            }
+            video.onloadedmetadata = function(e) {
+               video.play();
+            };
+         })
+         .catch(function(e) {
+            console.log(e.name + ": " + e.message);
+         });
+      }
+   </script> 
 
     <footer class="links" align="center" style="margin-top:50px;">
                 <p>by Xul &#169</p>

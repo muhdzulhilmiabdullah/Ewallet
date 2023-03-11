@@ -20,6 +20,16 @@ Route::auth();
 Route::get('/home', 'HomeController@index');
 Route::post('/sendMoney', 'HomeController@sendMoney')->name('sendMoney');
 
+//setting
+Route::post('/addPromoCode', 'HomeController@addPromoCode')->name('addPromoCode');
+Route::get('/promoCode', 'HomeController@getPromoCode')->name('getPromoCode');
+Route::post('/redeemCode','HomeController@redeemCode')->name('redeemCode');
+
+//qr
+Route::get('/qrCode', function () {
+    return view('qrCode');
+});
+
 
 
 
