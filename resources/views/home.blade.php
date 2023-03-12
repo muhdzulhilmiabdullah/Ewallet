@@ -131,7 +131,7 @@
                             <tr>
                                 <th scope="col">Last Updated</th>
                                 <th scope="col">Group</th>
-                                <th scope="col">Balance</th>
+                                <th scope="col">Balance</th>                          
                             </tr>
                         </thead>
                         <tbody>

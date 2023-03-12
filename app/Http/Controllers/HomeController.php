@@ -31,7 +31,7 @@ class HomeController extends Controller
     {
         //role 2 account holder
         $user = Auth::user()->groupInt;
-        $group = User::where('role','!=',1)->get();
+        $group = User::get();
         $walletData = Wallet::where('groupInt',$user)->first();
         
         $walletHistory = WalletHistory::where('sendBy',$user)->orWhere('receiveBy',$user)->orderby('updated_at','desc')->get();
@@ -59,7 +59,7 @@ class HomeController extends Controller
         $senderAmount = $request->sendAmount; // sender amount 100
         $senderAccount = Wallet::where('groupInt',$sender)->first();
         // $senderBalance = Wallet::where('group',$sender)->first(); //sender balance 800
-        $totalMinus = $senderAccount->amount - $senderAmount;
+        $totalMinus = $senderAccount->amount - $senderAmount; //duit account - duit nak hantar
         
         $receiver = $request->receiverId; //2
         $sendToReceiver = Wallet::where('groupInt',$receiver)->first(); //receiver account
@@ -70,7 +70,8 @@ class HomeController extends Controller
         $str = rand();
         $transId = substr(base_convert(md5($str), 16,32), 0, 12);
     if($sender != $receiver){
-        if($senderAccount->amount != 0){
+
+        if($totalMinus > 0){ //kalau duit orang tu 0, jadi dia tak dapat hantar
         
                 $sendToReceiver->amount = $totalSend; //900
                 $sendToReceiver->save();
@@ -84,8 +85,12 @@ class HomeController extends Controller
                 $walletHistory->receiveBy   = $receiver;
                 $walletHistory->transId     = $transId;
                 $walletHistory->save();
+
+                return redirect('/home')->with('status', 'You send RM '.$senderAmount. ' to Group '. $receiver  );
         }
-        return redirect('/home')->with('status', 'You send RM '.$senderAmount. ' to Group '. $receiver  );
+        else{
+                return redirect('/home')->with('error', 'You do not have enough RM to transfer! Please top-up');
+        }
     }
 
         return redirect('/home')->with('error', 'You cannot send to your own account lah!');
@@ -150,11 +155,11 @@ class HomeController extends Controller
             }   
         }
         else{
-            return redirect('/home')->with('error', 'The Promo Code is fully redeemed');
+            return redirect('/home')->with('error', 'The Promo Code is fully redeemed. Please try again!');
         }
         return redirect('/home')->with('status', 'You redeem RM '.$checkPromo->promoValue);
     }
-    return redirect('/home')->with('error', 'The Promo Code is not Exist');
+    return redirect('/home')->with('error', 'The Promo Code do not exist, maybe exist in another Multiverse!');
 }
     
     //promo boleh redeem sekali je
