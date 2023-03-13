@@ -23,9 +23,8 @@
                             <label class="sr-only" for="exampleInputAmount">Amount (in dollars)</label>
                             <div class="input-group">
                                 <div class="input-group-addon">RM</div>
-                                <input type="text" class="form-control" name=sendAmount id="sendAmount"
+                                <input type="number" class="form-control" name=sendAmount id="sendAmount"
                                     placeholder="Amount">
-                                <div class="input-group-addon">.00</div>
                             </div><br>
                             <div class="form-group">
                                 <select class="form-control" name="receiverId" id="receiverId">
@@ -126,7 +125,7 @@
 
                 </div>
                 <div class="table-responsive">
-                    <table class="table">
+                    <table class="table table-bordered">
                         <thead>
                             <tr>
                                 <th scope="col">Last Updated</th>

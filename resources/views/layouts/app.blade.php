@@ -20,8 +20,10 @@
     <style>
         body {
             font-family: 'Lato';
+            background: #222831;
+            color:#EEEEEE;
+            
         }
-
         .fa-btn {
             margin-right: 6px;
         }
@@ -43,6 +45,95 @@
          background-color: #647C90;
          color: red;
       }
+      .panel-default>.panel-heading{
+        background: #393E46;
+        color:#EEEEEE;
+        border-color:#393E46;  
+        border-radius: 12px; 
+      }
+      .btn-default{
+        color: #EEEEEE;
+        background-color: #00ADB5;
+        border-color: #393E46;
+      }
+      .input-group .form-control:last-child, .input-group-addon:last-child, .input-group-btn:first-child>.btn-group:not(:first-child)>.btn, .input-group-btn:first-child>.btn:not(:first-child), .input-group-btn:last-child>.btn, .input-group-btn:last-child>.btn-group>.btn, .input-group-btn:last-child>.dropdown-toggle{        
+        background-color: #393E46;
+        color:#EEEEEE;
+      }
+      .input-group-addon:first-child{
+        background-color: #393E46;
+        color:#EEEEEE;
+      }
+      .form-control{
+        background-color: #393E46;
+        color:#EEEEEE;
+      }
+      .panel-default {
+        border-color: #393E46;
+        background-color: #393E46;
+        border-radius: 12px;
+        padding: 2px;
+      }
+      .panel-body {
+        background-color: #393E46;
+        color:#EEEEEE;
+      }
+      .panel>.table-responsive{
+        background-color: #393E46;
+        color:#EEEEEE;
+        margin-bottom: 10px;
+      }
+      .container-fluid>.navbar-collapse, .container-fluid>.navbar-header, .container>.navbar-collapse, .container>.navbar-header{
+        background-color: #393E46;
+        color:#EEEEEE;
+        
+      }
+      .navbar-default .navbar-brand{
+        color:#EEEEEE;
+      }
+      .navbar-default{
+        color:#EEEEEE;
+        border-color: #393E46;
+        background-color: #393E46;
+      }
+      .navbar-default .navbar-nav>li>a{
+        color:#EEEEEE;
+        border-color: #393E46;
+        background-color: #393E46;
+      }
+      .navbar-default .navbar-nav>.open>a, .navbar-default .navbar-nav>.open>a:focus, .navbar-default .navbar-nav>.open>a:hover{
+        color:#EEEEEE;
+        border-color: #393E46;
+        background-color: #393E46;
+      }
+      .navbar-nav>li>.dropdown-menu{
+        border-color: #393E46;
+        background-color: #393E46;
+      }
+      .dropdown-menu>li>a{
+        color:#EEEEEE;
+      }
+      .navbar-default .navbar-toggle{
+        border-color: #393E46;
+        color:#EEEEEE;
+      }
+      .navbar-default .navbar-toggle:focus, .navbar-default .navbar-toggle:hover{
+        background-color: #393E46;
+        border-color: #393E46;
+      }
+      .container-fluid>.navbar-collapse, .container-fluid>.navbar-header, .container>.navbar-collapse, .container>.navbar-header{
+        border-color: #393E46;
+      }
+      .navbar-default .navbar-nav .open .dropdown-menu>li>a{
+        color:#EEEEEE;
+      }
+      .panel>.table-responsive:last-child>.table:last-child, .panel>.table:last-child{
+        border: 1px solid;
+        
+      }
+
+
+
     </style>
 </head>
 <body id="app-layout">
