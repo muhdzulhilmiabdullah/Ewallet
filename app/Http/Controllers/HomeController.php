@@ -26,15 +26,21 @@ class HomeController extends Controller
      * Show the application dashboard.
      *
      * @return \Illuminate\Http\Response
+     * 
      */
+    
+
+    
+
     public function index()
     {
         //role 2 account holder
         $user = Auth::user()->groupInt;
-        $group = User::get();
+        $group = User::where('groupInt','!=',$user)->orderBy('groupInt','asc')->get();
         $walletData = Wallet::where('groupInt',$user)->first();
         
         $walletHistory = WalletHistory::where('sendBy',$user)->orWhere('receiveBy',$user)->orderby('updated_at','desc')->get();
+        $adminHistory = WalletHistory::orderby('updated_at','desc')->get();
         //cari if the wallet owner ada send, or ada receive
 
         //admin view
@@ -44,7 +50,8 @@ class HomeController extends Controller
             'walletData'    => $walletData,
             'walletHistory' => $walletHistory,
             'groups'        => $group,
-            'datas'         => $data
+            'datas'         => $data,
+            'adminHistorys' => $adminHistory
         ]);
     }
 

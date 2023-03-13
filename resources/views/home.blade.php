@@ -10,14 +10,18 @@
     </div>
     @endif
     @if(session('error'))
-        <div class="alert alert-danger">
-            {!! session('error') !!}
+    <div class="alert alert-danger">
+        {!! session('error') !!}
     </div>
     @endif
     <div class="row">
         <div class="col-md-10 col-md-offset-1">
             <div class="panel panel-default">
-                <div class="panel-heading"><p style="font-weight:700;"> Send Money</p>
+                <div class="panel-heading">
+                <p align="left" style="font-weight:700;">Infinite Record-X</p>
+                    <h4 align="right">(Balance : RM{{number_format($walletData->amount)}})</h4>
+                    
+                    <p style="font-weight:700;"> Send Money</p>
                     <form action="{{route('sendMoney')}}" method="post">
                         <div class="form-group">
                             <label class="sr-only" for="exampleInputAmount">Amount (in dollars)</label>
@@ -44,13 +48,14 @@
         </div>
     </div>
 
-    
 
-@if(Auth::user()->role != 1)
-<div class="row">
+
+    @if(Auth::user()->role != 1)
+    <div class="row">
         <div class="col-md-10 col-md-offset-1">
             <div class="panel panel-default">
-                <div class="panel-heading"><p style="font-weight:700;"> Redeem Code</p>
+                <div class="panel-heading">
+                    <p style="font-weight:700;"> Redeem Code</p>
                     <form action="{{route('redeemCode')}}" method="post">
                         <div class="form-group">
                             <div class="input-group">
@@ -71,12 +76,7 @@
         <div class="col-md-10 col-md-offset-1">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <p align="left" style="font-weight:700;">Savings Acccount-X</p>
-                    <h4 align="right">(Balance : RM{{number_format($walletData->amount)}})</h4>
-                </div>
-                <div class="panel-body">
-                    Welcome <b>{{ Auth::user()->name }}</b> from <b>Group {{ Auth::user()->groupInt }}! </b>
-
+                    <p align="left" style="font-weight:700;">Account Transactions</p>
                 </div>
                 <div class="table-responsive">
                     <table class="table">
@@ -85,22 +85,30 @@
                                 <th scope="col">Time</th>
                                 <th scope="col">Status</th>
                                 <th scope="col">Amount</th>
-                                <th scope="col">Ref No</th>
+                                <!-- <th scope="col">Ref No</th> -->
                             </tr>
                         </thead>
                         <tbody>
                             @if(isset($walletHistory))
                             @foreach($walletHistory as $item)
                             <tr>
-                                <td>{{$item->created_at}}</td>
-                                @if($item->sendBy ==Auth::user()->id )
-                                <td>G{{$item->receiveBy}}</td>
-                                <td style="color:red">{{number_format($item->amount)}}</td>
+                                <td>{{$item->created_at->format('d M Y H:s')}}</td>
+                                @if($item->sendBy ==Auth::user()->groupInt )
+                                @if($item->receiveBy == 0)
+                                <td>To Admin</td>
                                 @else
-                                <td>G{{$item->sendBy}}</td>
-                                <td style="color:green">{{number_format($item->amount)}}</td>
+                                <td>To G{{$item->receiveBy}}</td>
                                 @endif
-                                <td>{{$item->transId}}</td>
+                                <td style="color:red">-RM {{number_format($item->amount)}}</td>
+                                @else
+                                @if($item->sendBy == 0)
+                                <td>From Admin</td>
+                                @else
+                                <td>From {{$item->sendBy}}</td>
+                                @endif
+                                <td style="color:green">RM {{number_format($item->amount)}}</td>
+                                @endif
+                                <!-- <td>{{$item->transId}}</td> -->
 
                             </tr>
                             @endforeach
@@ -112,17 +120,51 @@
             </div>
         </div>
     </div>
-@else
-<div class="row">
+    @else
+    <div class="row">
         <div class="col-md-10 col-md-offset-1">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <p align="left" style="font-weight:700;">Infinite Record-X</p>
-                    <h4 align="right">(Balance : RM{{number_format($walletData->amount)}})</h4>
+                    <p align="left" style="font-weight:700;">xE-Holder Transactions</p>
+    
                 </div>
-                <div class="panel-body">
-                    Welcome <b> King {{ Auth::user()->name }}!</b><br>Showing latest balance from all user.
 
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col">Last Updated</th>
+                                <th scope="col">Group</th>
+                                <th scope="col">Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if(isset($adminHistorys))
+                            @foreach($adminHistorys as $item)
+                            <tr>
+                                <td>{{$item->created_at->format('d M Y H:s')}}</td>
+
+                                @if($item->sendBy == $item->groupInt )
+                                <td>@if($item->sendBy == 0) Admin @else G{{$item->sendBy}}@endif ---> @if($item->receiveBy == 0) Admin @else G{{$item->receiveBy}}@endif</td>
+                                <td style="color:green">RM {{number_format($item->amount)}}</td>
+                                @endif
+                              
+                            </tr>
+                            @endforeach
+                            @endif
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <p align="left" style="font-weight:700;">xE-Holder Records</p>                  
                 </div>
                 <div class="table-responsive">
                     <table class="table table-bordered">
@@ -130,7 +172,7 @@
                             <tr>
                                 <th scope="col">Last Updated</th>
                                 <th scope="col">Group</th>
-                                <th scope="col">Balance</th>                          
+                                <th scope="col">Balance</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -151,6 +193,6 @@
         </div>
     </div>
 
-@endif
+    @endif
 </div>
 @stop
