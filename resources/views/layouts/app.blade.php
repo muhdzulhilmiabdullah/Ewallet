@@ -180,12 +180,12 @@
                                 {{ Auth::user()->name }}   <span class="caret"></span>
 
                             <ul class="dropdown-menu" role="menu">
-                                <li><a href="{{ url('/logout') }}"><i class="fa fa-btn fa-sign-out"></i>Logout</a></li>
-                                <li><a href="{{ url('/qrCode') }}"><i class="fa fa-btn fa-sign-out"></i>QR Code</a></li>
                                 @if(Auth::user()->role ==1)
                                 <li><a href="{{ url('/allUser') }}"><i class="fa fa-btn fa-sign-out"></i>Settings</a></li>
                                 <li><a href="{{ url('/promoCode') }}"><i class="fa fa-btn fa-sign-out"></i>Promo Code</a></li>
+                                <li><a href="{{ url('/qrCode') }}"><i class="fa fa-btn fa-sign-out"></i>QR Code</a></li>  
                                 @endif
+                                <li><a href="{{ url('/logout') }}"><i class="fa fa-btn fa-sign-out"></i>Logout</a></li>
                             </ul>
                         </li>
                     @endif

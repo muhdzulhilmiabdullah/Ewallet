@@ -39,7 +39,7 @@
                                 </select>
                             </div>
                             <input type="hidden" name="_token" value="{{ Session::token() }}">
-                            <button type="submit" class="btn btn-default">Submit</button>
+                            <button type="submit" class="btn btn-default">Send</button>
 
                         </div>
                     </form>
@@ -117,10 +117,49 @@
                         </tbody>
                     </table>
                 </div>
+                <div class="row footer_height">
+      <div class="col-md-4 col-md-offset-4">
+        {!! $walletHistory->render() !!}
+      </div>
+    </div>
             </div>
         </div>
     </div>
     @else
+    
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <p align="left" style="font-weight:700;">xE-Holder Records</p>                  
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col">Last Updated</th>
+                                <th scope="col">Group</th>
+                                <th scope="col">Balance</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if(isset($datas))
+                            @foreach($datas as $item)
+                            <tr>
+                                <td>{{$item->updated_at->format('d M Y H:s')}}</td>
+                                <td>Group {{$item->groupInt}} </td>
+                                <td>RM {{number_format($item->amount)}}</td>
+                            </tr>
+                            @endforeach
+                            @endif
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="row">
         <div class="col-md-10 col-md-offset-1">
             <div class="panel panel-default">
@@ -145,43 +184,10 @@
                                 <td>{{$item->created_at->format('d M Y H:s')}}</td>
 
                                 @if($item->sendBy == $item->groupInt )
-                                <td>@if($item->sendBy == 0) Admin @else G{{$item->sendBy}}@endif ---> @if($item->receiveBy == 0) Admin @else G{{$item->receiveBy}}@endif</td>
+                                <td>@if($item->sendBy == 0) Admin @else G{{$item->sendBy}}@endif to @if($item->receiveBy == 0) Admin @else G{{$item->receiveBy}}@endif</td>
                                 <td style="color:green">RM {{number_format($item->amount)}}</td>
                                 @endif
                               
-                            </tr>
-                            @endforeach
-                            @endif
-
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-md-10 col-md-offset-1">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <p align="left" style="font-weight:700;">xE-Holder Records</p>                  
-                </div>
-                <div class="table-responsive">
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th scope="col">Last Updated</th>
-                                <th scope="col">Group</th>
-                                <th scope="col">Balance</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @if(isset($datas))
-                            @foreach($datas as $item)
-                            <tr>
-                                <td>{{$item->updated_at}}</td>
-                                <td>Group {{$item->groupInt}} </td>
-                                <td>RM {{number_format($item->amount)}}</td>
                             </tr>
                             @endforeach
                             @endif

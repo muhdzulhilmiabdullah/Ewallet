@@ -9,6 +9,7 @@ use Auth;
 use App\Models\WalletHistory;
 use App\Models\User;
 use App\Models\PromoCode;
+use App\Models\PromoHistory;
 
 class HomeController extends Controller
 {
@@ -39,7 +40,7 @@ class HomeController extends Controller
         $group = User::where('groupInt','!=',$user)->orderBy('groupInt','asc')->get();
         $walletData = Wallet::where('groupInt',$user)->first();
         
-        $walletHistory = WalletHistory::where('sendBy',$user)->orWhere('receiveBy',$user)->orderby('updated_at','desc')->get();
+        $walletHistory = WalletHistory::where('sendBy',$user)->orWhere('receiveBy',$user)->orderby('updated_at','desc')->paginate(50);
         $adminHistory = WalletHistory::orderby('updated_at','desc')->get();
         //cari if the wallet owner ada send, or ada receive
 
@@ -116,6 +117,8 @@ class HomeController extends Controller
             $promoCode->promoValue      = $request->promoValue;
             $promoCode->save();
 
+
+
             return redirect('/promoCode')->with('status', 'You created a Promo Code of '.$request->promoCodeNm. ' with '. $request->promoRedeem. ' redemptions.'  );
         }
     }
@@ -134,13 +137,13 @@ class HomeController extends Controller
 
         $checkPromo = PromoCode::where('promoCodeNm',$request->redeemCode)->first();
         $group = Auth::user()->groupInt;
-
-         //transid
+        $checkRedeem = PromoHistory::where('userID',$group)->where('promoID',$checkPromo->id)->first();
+       
          $str = rand();
          $transId = substr(base_convert(md5($str), 16,32), 0, 12);
 
     if($checkPromo){
-        if($checkPromo->promoRedeem != 0){
+        if($checkPromo->promoRedeem != 0 && $checkRedeem == null){
 
             $addToWallet = Wallet::where('groupInt',$group)->first();
             $wallet = $addToWallet->amount + $checkPromo->promoValue;
@@ -154,15 +157,23 @@ class HomeController extends Controller
 
                 $walletHistory = new WalletHistory();
                 $walletHistory->amount      = $checkPromo->promoValue;
-                $walletHistory->groupInt    = 0;
+                $walletHistory->groupInt    = 100;
                 $walletHistory->sendBy      = 0;
                 $walletHistory->receiveBy   = $group;
                 $walletHistory->transId     = $transId;
                 $walletHistory->save();
+
+                $promoHistory = new PromoHistory();
+                $promoHistory->userID = $group;
+                $promoHistory->promoID = $checkPromo->id;
+                $promoHistory->save();
+
             }   
         }
         else{
-            return redirect('/home')->with('error', 'The Promo Code is fully redeemed. Please try again!');
+            if($checkPromo->redeem == 0)
+            return redirect('/home')->with('error', 'The Promo Code is fully redeem. Please try again!');
+            else return redirect('/home')->with('error', 'You redeemed the code. Please try again!');
         }
         return redirect('/home')->with('status', 'You redeem RM '.$checkPromo->promoValue);
     }
