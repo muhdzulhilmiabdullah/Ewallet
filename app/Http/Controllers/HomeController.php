@@ -45,7 +45,7 @@ class HomeController extends Controller
         //cari if the wallet owner ada send, or ada receive
 
         //admin view
-        $data = Wallet::where('groupInt','!=',0)->get();
+        $data = Wallet::where('groupInt','!=',0)->orderby('amount','desc')->get();
         
         return view('home')->with([
             'walletData'    => $walletData,

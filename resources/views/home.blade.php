@@ -34,7 +34,11 @@
                                 <select class="form-control" name="receiverId" id="receiverId">
                                     <option>-- Select Group --</option>
                                     @foreach($groups as $group)
-                                    <option value="{{$group->groupInt}}">{{$group->groupInt}}</option>
+                                    @if($group->groupInt == 0)
+                                    <option  value="{{$group->groupInt}}">Admin</option>
+                                    @else
+                                    <option value="{{$group->groupInt}}">Group {{$group->groupInt}}</option>
+                                    @endif
                                     @endforeach
                                 </select>
                             </div>
@@ -175,6 +179,7 @@
                                 <th scope="col">Last Updated</th>
                                 <th scope="col">Group</th>
                                 <th scope="col">Amount</th>
+                                <th scope="col">Ref No</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -182,10 +187,10 @@
                             @foreach($adminHistorys as $item)
                             <tr>
                                 <td>{{$item->created_at->format('d M Y H:s')}}</td>
-
                                 @if($item->sendBy == $item->groupInt )
                                 <td>@if($item->sendBy == 0) Admin @else G{{$item->sendBy}}@endif to @if($item->receiveBy == 0) Admin @else G{{$item->receiveBy}}@endif</td>
                                 <td style="color:green">RM {{number_format($item->amount)}}</td>
+                                <td>{{$item->transId}}</td>
                                 @endif
                               
                             </tr>

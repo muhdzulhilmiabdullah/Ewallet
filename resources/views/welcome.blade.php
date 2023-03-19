@@ -9,6 +9,8 @@
 
                 <div class="panel-body">
                     Hello there, welcome to xE-wallet's.<br>
+                    This wallet will be used for your MCE activities.<br>
+                    Goodluck & have fun.
                 </div>
                 <div class="panel-body">
                     <a  class="btn btn-primary btn-sm" href="{{ url('/login') }}">Login</a>
