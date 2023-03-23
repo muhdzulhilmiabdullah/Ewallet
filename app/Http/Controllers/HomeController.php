@@ -58,52 +58,35 @@ class HomeController extends Controller
 
     //send money
     public function sendMoney(Request $request)
-    {
+{
+    $sender = Auth::user()->groupInt;
+    $senderAmount = $request->sendAmount;
+    $senderWallet = Wallet::where('groupInt', $sender)->firstOrFail();
+    $receiver = $request->receiverId;
+    $receiverWallet = Wallet::where('groupInt', $receiver)->firstOrFail();
 
-        //check sender account & check receiver account
-        $totalMinus = 0;
-        $totalSend = 0;
-        $sender = Auth::user()->groupInt;//sender id 1 
-        $senderAmount = $request->sendAmount; // sender amount 100
-        $senderAccount = Wallet::where('groupInt',$sender)->first();
-        // $senderBalance = Wallet::where('group',$sender)->first(); //sender balance 800
-        $totalMinus = $senderAccount->amount - $senderAmount; //duit account - duit nak hantar
-        
-        $receiver = $request->receiverId; //2
-        $sendToReceiver = Wallet::where('groupInt',$receiver)->first(); //receiver account
-        // $receiverWalletAmount = $sendToReceiver->amount; //receiver balacnce 800
-        $totalSend = $sendToReceiver->amount + $senderAmount;//100 + 800
-        
-        //transid
-        $str = rand();
-        $transId = substr(base_convert(md5($str), 16,32), 0, 12);
-    if($sender != $receiver){
-
-        if($totalMinus > 0){ //kalau duit orang tu 0, jadi dia tak dapat hantar
-        
-                $sendToReceiver->amount = $totalSend; //900
-                $sendToReceiver->save();
-                $senderAccount->amount = $totalMinus;
-                $senderAccount->save();
-                
-                $walletHistory = new WalletHistory();
-                $walletHistory->amount      = $senderAmount;
-                $walletHistory->groupInt    = $sender;
-                $walletHistory->sendBy      = $sender;
-                $walletHistory->receiveBy   = $receiver;
-                $walletHistory->transId     = $transId;
-                $walletHistory->save();
-
-                return redirect('/home')->with('status', 'You send RM '.$senderAmount. ' to Group '. $receiver  );
-        }
-        else{
-                return redirect('/home')->with('error', 'You do not have enough RM to transfer! Please top-up');
-        }
+    if ($sender == $receiver) {
+        return redirect('/home')->with('error', 'You cannot send to your own account.');
     }
 
-        return redirect('/home')->with('error', 'You cannot send to your own account lah!');
+    if ($senderWallet->amount < $senderAmount) {
+        return redirect('/home')->with('error', 'You do not have enough RM to transfer! Please top-up.');
     }
+    $str = rand();
+    $senderWallet->decrement('amount', $senderAmount);
+    $receiverWallet->increment('amount', $senderAmount);
 
+    $walletHistory = new WalletHistory();
+    $walletHistory->amount = $senderAmount;
+    $walletHistory->groupInt = $sender;
+    $walletHistory->sendBy = $sender;
+    $walletHistory->receiveBy = $receiver;
+    $walletHistory->transId = substr(base_convert(md5($str), 16,32), 0, 12);
+    $walletHistory->save();
+
+    return redirect('/home')->with('status', 'You send RM ' . $senderAmount . ' to Group ' . $receiver);
+}
+        
     //promo code for admin
     public function addPromoCode(Request $request){
 
@@ -116,8 +99,6 @@ class HomeController extends Controller
             $promoCode->promoRedeem     = $request->promoRedeem;
             $promoCode->promoValue      = $request->promoValue;
             $promoCode->save();
-
-
 
             return redirect('/promoCode')->with('status', 'You created a Promo Code of '.$request->promoCodeNm. ' with '. $request->promoRedeem. ' redemptions.'  );
         }
@@ -157,7 +138,7 @@ class HomeController extends Controller
 
                 $walletHistory = new WalletHistory();
                 $walletHistory->amount      = $checkPromo->promoValue;
-                $walletHistory->groupInt    = 100;
+                $walletHistory->groupInt    = 0;
                 $walletHistory->sendBy      = 0;
                 $walletHistory->receiveBy   = $group;
                 $walletHistory->transId     = $transId;
