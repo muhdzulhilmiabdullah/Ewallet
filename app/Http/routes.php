@@ -15,6 +15,18 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/checkpoint/1', function () {
+    return view('checkPoint1');
+});
+
+Route::get('/checkpoint/2', function () {
+    return view('checkPoint2');
+});
+
+Route::get('/checkpoint/3', function () {
+    return view('checkPoint3');
+});
+
 Route::auth();
 
 Route::get('/home', 'HomeController@index')->name('home');
