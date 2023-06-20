@@ -162,5 +162,35 @@ class HomeController extends Controller
 }
     
     //promo boleh redeem sekali je
+
+    public function deductMoney(Request $request){
+        
+        //group id
+        $deductGroup = $request->deductGroup;
+        //amount
+        $deductAmount = $request->deductAmount;
+
+        $str = rand();
+        $transId = substr(base_convert(md5($str), 16,32), 0, 12);
+        //update wallet account
+        $getDeductWallet = Wallet::where('groupInt', $deductGroup)->firstOrFail(); //33123
+        $getDeductWallet->amount = ($getDeductWallet->amount) - $deductAmount;
+        $getDeductWallet->save();
+        //admin wallet
+        $adminWallet = Wallet::where('groupInt',0)->firstOrFail();
+        $adminWallet->amount = $adminWallet->amount + $deductAmount;
+        $adminWallet->save();
+        //update wallet history transaction id 
+        $walletHistory = new WalletHistory();
+        $walletHistory->amount = $deductAmount;
+        $walletHistory->groupInt = $deductGroup;
+        $walletHistory->sendBy = $deductGroup;
+        $walletHistory->receiveBy = 0; //update  deduct by admin
+        $walletHistory->transId = $transId;
+        $walletHistory->save();
+
+        return redirect('/home')->with('status', 'You deduct RM ' . $deductAmount . ' from ' . $deductGroup);
+        
+    }
     
 }

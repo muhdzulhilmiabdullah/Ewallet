@@ -50,6 +50,8 @@
         color:#EEEEEE;
         border-color:#393E46;  
         border-radius: 12px; 
+        
+
       }
       .btn-default{
         color: #EEEEEE;
@@ -129,10 +131,11 @@
       }
       .panel>.table-responsive:last-child>.table:last-child, .panel>.table:last-child{
         border: 1px solid;
-        
       }
-
-      
+      .panel-heading {
+        background-image: url('https://www.thinksnaps.com/wp-content/uploads/2014/07/images-background.jpg');
+        /* Add other background properties if needed */
+    }
 
 
 

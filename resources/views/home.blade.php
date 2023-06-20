@@ -52,6 +52,45 @@
         </div>
     </div>
 
+    @if(Auth::user()->role == 1)
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                <p align="left" style="font-weight:700;">Along Deduct Record-X</p>
+                    <!-- <h4 align="right">(Balance : RM{{number_format($walletData->amount)}})</h4> -->
+                    
+                    <p style="font-weight:700;"> Deduct Money</p>
+                    <form action="{{route('deductMoney')}}" method="post">
+                        <div class="form-group">
+                            <label class="sr-only" for="exampleInputAmount">Amount (in dollars)</label>
+                            <div class="input-group">
+                                <div class="input-group-addon">RM</div>
+                                <input type="number" class="form-control" name=deductAmount id="deductAmount"
+                                    placeholder="Deduction Amount">
+                            </div><br>
+                            <div class="form-group">
+                                <select class="form-control" name="deductGroup" id="deductGroup">
+                                    <option>-- Select Group --</option>
+                                    @foreach($groups as $group)
+                                    @if($group->groupInt == 0)
+                                    <option  value="{{$group->groupInt}}">Admin</option>
+                                    @else
+                                    <option value="{{$group->groupInt}}">Group {{$group->groupInt}}</option>
+                                    @endif
+                                    @endforeach
+                                </select>
+                            </div>
+                            <input type="hidden" name="_token" value="{{ Session::token() }}">
+                            <button type="submit" class="btn btn-default">Send</button>
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+@endif
 
 
     @if(Auth::user()->role != 1)
@@ -188,7 +227,8 @@
                             <tr>
                                 <td>{{$item->created_at->format('d M Y H:s')}}</td>
                                 @if($item->sendBy == $item->groupInt )
-                                <td>@if($item->sendBy == 0) Admin @else G{{$item->sendBy}}@endif to @if($item->receiveBy == 0) Admin @else G{{$item->receiveBy}}@endif</td>
+                                <td>@if($item->sendBy == 0) Admin 
+                                    @else G{{$item->sendBy}}@endif to @if($item->receiveBy == 0) Admin @else G{{$item->receiveBy}}@endif</td>
                                 <td style="color:green">RM {{number_format($item->amount)}}</td>
                                 <td>{{$item->transId}}</td>
                                 @endif

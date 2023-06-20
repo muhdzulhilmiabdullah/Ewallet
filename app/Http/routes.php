@@ -31,6 +31,7 @@ Route::auth();
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::post('/sendMoney', 'HomeController@sendMoney')->name('sendMoney');
+Route::post('/deductMoney', 'HomeController@deductMoney')->name('deductMoney');
 
 //setting
 Route::post('/addPromoCode', 'HomeController@addPromoCode')->name('addPromoCode');
