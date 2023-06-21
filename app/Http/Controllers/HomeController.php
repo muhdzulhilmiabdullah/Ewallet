@@ -82,6 +82,7 @@ class HomeController extends Controller
     $walletHistory->sendBy = $sender;
     $walletHistory->receiveBy = $receiver;
     $walletHistory->transId = substr(base_convert(md5($str), 16,32), 0, 12);
+    $walletHistory->remarks = 'Transaction';
     $walletHistory->save();
 
     return redirect('/home')->with('status', 'You send RM ' . $senderAmount . ' to Group ' . $receiver);
@@ -116,10 +117,11 @@ class HomeController extends Controller
     public function redeemCode(Request $request){
         $checkPromo = null;
 
-        $checkPromo = PromoCode::where('promoCodeNm',$request->redeemCode)->first();
         $group = Auth::user()->groupInt;
+        $checkPromo = PromoCode::where('promoCodeNm',$request->redeemCode)->first();
+        if($checkPromo)
         $checkRedeem = PromoHistory::where('userID',$group)->where('promoID',$checkPromo->id)->first();
-       
+
          $str = rand();
          $transId = substr(base_convert(md5($str), 16,32), 0, 12);
 
@@ -142,6 +144,7 @@ class HomeController extends Controller
                 $walletHistory->sendBy      = 0;
                 $walletHistory->receiveBy   = $group;
                 $walletHistory->transId     = $transId;
+                $walletHistory->remarks     = 'Promo redeemed';
                 $walletHistory->save();
 
                 $promoHistory = new PromoHistory();
@@ -187,6 +190,7 @@ class HomeController extends Controller
         $walletHistory->sendBy = $deductGroup;
         $walletHistory->receiveBy = 0; //update  deduct by admin
         $walletHistory->transId = $transId;
+        $walletHistory->remarks = 'Denda';
         $walletHistory->save();
 
         return redirect('/home')->with('status', 'You deduct RM ' . $deductAmount . ' from ' . $deductGroup);

@@ -218,6 +218,7 @@
                                 <th scope="col">Last Updated</th>
                                 <th scope="col">Group</th>
                                 <th scope="col">Amount</th>
+                                <th scope="col">Status</th>
                                 <th scope="col">Ref No</th>
                             </tr>
                         </thead>
@@ -230,6 +231,7 @@
                                 <td>@if($item->sendBy == 0) Admin 
                                     @else G{{$item->sendBy}}@endif to @if($item->receiveBy == 0) Admin @else G{{$item->receiveBy}}@endif</td>
                                 <td style="color:green">RM {{number_format($item->amount)}}</td>
+                                <td>{{$item->remarks}}</td>
                                 <td>{{$item->transId}}</td>
                                 @endif
                               
