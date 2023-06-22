@@ -46,13 +46,15 @@ class HomeController extends Controller
 
         //admin view
         $data = Wallet::where('groupInt','!=',0)->orderby('amount','desc')->get();
+        $transactionCount = WalletHistory::where('groupInt','!=',0)->count();
         
         return view('home')->with([
-            'walletData'    => $walletData,
-            'walletHistory' => $walletHistory,
-            'groups'        => $group,
-            'datas'         => $data,
-            'adminHistorys' => $adminHistory
+            'walletData'        => $walletData,
+            'walletHistory'     => $walletHistory,
+            'groups'            => $group,
+            'datas'             => $data,
+            'adminHistorys'     => $adminHistory,
+            'transactionCounts' => $transactionCount
         ]);
     }
 

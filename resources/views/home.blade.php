@@ -19,14 +19,14 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                 <p align="left" style="font-weight:700;">Infinite Record-X</p>
-                    <h4 align="right">(Balance : RM{{number_format($walletData->amount)}})</h4>
+                    <h4 align="right">(Balance : Xm {{number_format($walletData->amount)}})</h4>
                     
-                    <p style="font-weight:700;"> Send Money</p>
+                    <p style="font-weight:700;"> Send Xm</p>
                     <form action="{{route('sendMoney')}}" method="post">
                         <div class="form-group">
                             <label class="sr-only" for="exampleInputAmount">Amount (in dollars)</label>
                             <div class="input-group">
-                                <div class="input-group-addon">RM</div>
+                                <div class="input-group-addon">Xm</div>
                                 <input type="number" class="form-control" name=sendAmount id="sendAmount"
                                     placeholder="Amount">
                             </div><br>
@@ -57,15 +57,15 @@
         <div class="col-md-10 col-md-offset-1">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                <p align="left" style="font-weight:700;">Along Deduct Record-X</p>
+                <p align="left" style="font-weight:700;">Ahlong Deduct Record-X</p>
                     <!-- <h4 align="right">(Balance : RM{{number_format($walletData->amount)}})</h4> -->
                     
-                    <p style="font-weight:700;"> Deduct Money</p>
+                    <p style="font-weight:700;"> Deduct Xm</p>
                     <form action="{{route('deductMoney')}}" method="post">
                         <div class="form-group">
                             <label class="sr-only" for="exampleInputAmount">Amount (in dollars)</label>
                             <div class="input-group">
-                                <div class="input-group-addon">RM</div>
+                                <div class="input-group-addon">Xm</div>
                                 <input type="number" class="form-control" name=deductAmount id="deductAmount"
                                     placeholder="Deduction Amount">
                             </div><br>
@@ -82,7 +82,7 @@
                                 </select>
                             </div>
                             <input type="hidden" name="_token" value="{{ Session::token() }}">
-                            <button type="submit" class="btn btn-default">Send</button>
+                            <button type="submit" class="btn btn-danger">Deduct</button>
 
                         </div>
                     </form>
@@ -142,14 +142,14 @@
                                 @else
                                 <td>To G{{$item->receiveBy}}</td>
                                 @endif
-                                <td style="color:red">-RM {{number_format($item->amount)}}</td>
+                                <td style="color:red">-Xm {{number_format($item->amount)}}</td>
                                 @else
                                 @if($item->sendBy == 0)
                                 <td>From Admin</td>
                                 @else
                                 <td>From {{$item->sendBy}}</td>
                                 @endif
-                                <td style="color:green">RM {{number_format($item->amount)}}</td>
+                                <td style="color:green">Xm {{number_format($item->amount)}}</td>
                                 @endif
                                 <!-- <td>{{$item->transId}}</td> -->
 
@@ -174,7 +174,8 @@
         <div class="col-md-10 col-md-offset-1">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <p align="left" style="font-weight:700;">xE-Holder Records</p>                  
+                    <p align="left" style="font-weight:700;">xE-Holder Records</p>       
+                    <h4 align="right">(Balance : Xm {{number_format($walletData->amount)}})</h4>           
                 </div>
                 <div class="table-responsive">
                     <table class="table table-bordered">
@@ -191,7 +192,7 @@
                             <tr>
                                 <td>{{$item->updated_at->format('d M Y H:s')}}</td>
                                 <td>Group {{$item->groupInt}} </td>
-                                <td>RM {{number_format($item->amount)}}</td>
+                                <td>Xm {{number_format($item->amount)}}</td>
                             </tr>
                             @endforeach
                             @endif
@@ -230,7 +231,7 @@
                                 @if($item->sendBy == $item->groupInt )
                                 <td>@if($item->sendBy == 0) Admin 
                                     @else G{{$item->sendBy}}@endif to @if($item->receiveBy == 0) Admin @else G{{$item->receiveBy}}@endif</td>
-                                <td style="color:green">RM {{number_format($item->amount)}}</td>
+                                <td style="color:green">Xm {{number_format($item->amount)}}</td>
                                 <td>{{$item->remarks}}</td>
                                 <td>{{$item->transId}}</td>
                                 @endif
