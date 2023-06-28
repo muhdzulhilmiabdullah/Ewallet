@@ -7,6 +7,7 @@ use Auth;
 use App\Http\Requests;
 use App\Models\User;
 use App\Models\Wallet;
+use App\Models\WalletHistory;
 
 class SettingController extends Controller
 {
@@ -52,7 +53,7 @@ class SettingController extends Controller
         $group = 0;
         $group = User::where('groupInt', $request->group)->count();
         
-        if($group != 1 ){
+        if($group != 1 && $request->group < 43 ){
 
             $newUser        = new User();
             $newUser->name      = $request->name;
@@ -64,7 +65,25 @@ class SettingController extends Controller
 
             $createWallet = new Wallet();
             $createWallet->groupInt   = $request->group;
+            $createWallet->amount     = 10000;
             $createWallet->save();
+
+            //admin wallet
+            $adminWallet = Wallet::where('groupInt',0)->firstOrFail();
+            $adminWallet->amount = $adminWallet->amount - 10000;
+            $adminWallet->save();
+            //update wallet history transaction id 
+            $str = rand();
+            $transId = substr(base_convert(md5($str), 16,32), 0, 12);
+
+            $walletHistory = new WalletHistory();
+            $walletHistory->amount = 10000;
+            $walletHistory->groupInt = 0;
+            $walletHistory->sendBy = 0;
+            $walletHistory->receiveBy = $request->group;
+            $walletHistory->transId = $transId;
+            $walletHistory->remarks = 'New Sign Up';
+            $walletHistory->save();
 
             
 

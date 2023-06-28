@@ -198,5 +198,19 @@ class HomeController extends Controller
         return redirect('/home')->with('status', 'You deduct RM ' . $deductAmount . ' from ' . $deductGroup);
         
     }
+
+    //admin can view user transaction
+    public function viewUserTrans($group){
+
+
+        $walletData         = Wallet::where('groupInt',$group)->firstOrFail();
+        $walletHistory      = WalletHistory::where('sendBy',$group)->orWhere('receiveBy',$group)->orderby('updated_at','desc')->get();
+
+
+        return view('userTransaction')->with([
+            'walletData'        => $walletData,
+            'walletHistory'     => $walletHistory,
+        ]);
+    }
     
 }

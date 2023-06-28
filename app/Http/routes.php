@@ -40,6 +40,7 @@ Route::post('/redeemCode','HomeController@redeemCode')->name('redeemCode');
 Route::get('/allUser', 'SettingController@allUser')->name('allUser');
 Route::post('/editUser', 'SettingController@editUser')->name('editUser');
 Route::get('getUserAjax/{id}', 'SettingController@getUserAjax')->name('getUserAjax');
+Route::get('getUserTransaction/{id}', 'HomeController@viewUserTrans')->name('viewUserTrans');
 
 //qr
 Route::get('/qrCode', function () {
